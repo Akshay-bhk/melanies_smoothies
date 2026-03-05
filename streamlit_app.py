@@ -47,8 +47,6 @@ VALUES ('""" + ingredients_string + """','""" + name_on_order + """')"""
 
 if ingredients_list:
 
-   if ingredients_list:
-
     for fruit_chosen in ingredients_list:
 
         st.subheader(fruit_chosen + " Nutrition Information")
@@ -59,15 +57,12 @@ if ingredients_list:
 
         nutrition_json = smoothiefroot_response.json()
 
-        # Check if API returned valid nutrition data
+        # Check if the fruit exists in the API
         if "error" in nutrition_json:
-
             st.warning(nutrition_json["error"])
 
         else:
-
             nutrition_df = pd.DataFrame(nutrition_json)
-
             st.dataframe(nutrition_df, use_container_width=True)
 
             
