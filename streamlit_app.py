@@ -44,7 +44,6 @@ VALUES ('""" + ingredients_string + """','""" + name_on_order + """')"""
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered!', icon="✅")
 # -------- SmoothieFroot Nutrition Section --------
-
 if ingredients_list:
 
     for fruit_chosen in ingredients_list:
@@ -57,12 +56,14 @@ if ingredients_list:
 
         nutrition_json = smoothiefroot_response.json()
 
-        # Check if the fruit exists in the API
-        if "error" in nutrition_json:
+        # If the API returned an error message
+        if isinstance(nutrition_json, dict) and "error" in nutrition_json:
+
             st.warning(nutrition_json["error"])
 
         else:
-            nutrition_df = pd.DataFrame(nutrition_json)
-            st.dataframe(nutrition_df, use_container_width=True)
-
-            
+            try:
+                nutrition_df = pd.DataFrame(nutrition_json)
+                st.dataframe(nutrition_df, use_container_width=True)
+            except:
+                st.warning("Sorry, this fruit is not in the SmoothieFroot database.")
