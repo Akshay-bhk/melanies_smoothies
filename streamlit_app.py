@@ -50,12 +50,18 @@ VALUES ('""" + ingredients_string + """','""" + name_on_order + """')"""
 # -------- SmoothieFroot Nutrition Section --------
 st.subheader("SmoothieFroot Nutrition Information")
 
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit")
+if ingredients_list:
 
-if smoothiefroot_response.status_code == 200:
+    for fruit_chosen in ingredients_list:
 
-    fruit_json = smoothiefroot_response.json()
+        smoothiefroot_response = requests.get(
+            "https://my.smoothiefroot.com/api/fruit/" + fruit_chosen.lower()
+        )
 
-    fruit_df = pd.DataFrame(fruit_json)
+        if smoothiefroot_response.status_code == 200:
 
-    st.dataframe(fruit_df, use_container_width=True)
+            nutrition_json = smoothiefroot_response.json()
+
+            nutrition_df = pd.DataFrame(nutrition_json)
+
+            st.dataframe(nutrition_df, use_container_width=True)
